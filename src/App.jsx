@@ -10,10 +10,25 @@ const Navbar = () => {
   )
 }
 
+const generateRandomId = () => {
+  let output = '';
+  const alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  for (let i = 0; i < 6; i++) {
+    output += alphanumeric[Math.floor(Math.random() * alphanumeric.length)];
+  }
+
+  return output;
+}
+
 class App extends Component {
   constructor() {
     super();
+    this.addNewMessage = this.addNewMessage.bind(this);
     this.state = {
+      loading: true,
+      currentUser: "Anonymous",
+      // messages: [],
       messages: [
         {
         id: 1,
@@ -59,12 +74,33 @@ class App extends Component {
     }
   }
 
+  addNewMessage(username, content) {
+    const newMessage = {
+      id: generateRandomId(),
+      type: 'incomingMessage',
+      username: username,
+      content: content,
+    }
+
+    this.setState({
+      messages: this.state.messages.concat(newMessage)
+    });
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
+  }
+
   render() {
     return (
       <div>
         <Navbar />
-        <MessageList messages={this.state.messages}/>
-        <ChatBar />
+        { this.state.loading ? "Now loading..." : <MessageList messages={this.state.messages}/> }
+        <ChatBar currentUser={ this.state.currentUser }/>
       </div>
     );
   }
