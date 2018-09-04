@@ -87,6 +87,12 @@ class App extends Component {
     });
   }
 
+  updateUsername(username) {
+    this.setState({
+      currentUser: username,
+    });
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({
@@ -99,8 +105,8 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        { this.state.loading ? "Now loading..." : <MessageList messages={this.state.messages}/> }
-        <ChatBar currentUser={ this.state.currentUser }/>
+        { this.state.loading ? 'Now loading...' : <MessageList messages={ this.state.messages }/> }
+        <ChatBar currentUser={ this.state.currentUser } addNewMessage={ this.addNewMessage } />
       </div>
     );
   }
