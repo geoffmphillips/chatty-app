@@ -2,13 +2,6 @@ import React from 'react';
 
 function ChatBar(props) {
   const { addNewMessage, currentUser, changeUsername, changeNewMessage, currentMessage } = props;
-  function onSubmit(event) {
-    event.preventDefault();
-    const message = event.target.elements.message;
-    const username = event.target.elements.username.value;
-    addNewMessage(username, message.value);
-    message.value = '';
-  }
 
   const onUsernameChange = (event) => {
     changeUsername(event.target.value);
