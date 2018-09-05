@@ -10,25 +10,15 @@ const Navbar = () => {
   )
 }
 
-const generateRandomId = () => {
-  let output = '';
-  const alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-  for (let i = 0; i < 6; i++) {
-    output += alphanumeric[Math.floor(Math.random() * alphanumeric.length)];
-  }
-
-  return output;
-}
-
 class App extends Component {
   constructor() {
     super();
     this.addNewMessage = this.addNewMessage.bind(this);
+    this.changeUsername = this.changeUsername.bind(this);
+    this.changeNewMessage = this.changeNewMessage.bind(this);
     this.state = {
-      loading: true,
       currentUser: "Anonymous",
-      // messages: [],
+      currentMessage: "",
       messages: [
         {
         id: 1,
@@ -76,37 +66,49 @@ class App extends Component {
 
   addNewMessage(username, content) {
     const newMessage = {
-      id: generateRandomId(),
-      type: 'incomingMessage',
       username: username,
       content: content,
     }
 
-    this.setState({
-      messages: this.state.messages.concat(newMessage)
-    });
+    const jsonMessage = JSON.stringify(newMessage);
+    this.socket.send(jsonMessage);
   }
 
-  updateUsername(username) {
+  changeUsername(username) {
     this.setState({
       currentUser: username,
-    });
+    })
+
+  }
+
+  changeNewMessage (message) {
+    this.setState({
+      currentMessage: message,
+    })
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        loading: false,
-      });
-    }, 1000);
-  }
+    this.socket = new WebSocket('ws://localhost:3001');
 
+    this.socket.onmessage = (event) => {
+      let message = JSON.parse(event.data);
+      message.type = 'incomingMessage';
+      this.setState( { messages: this.state.messages.concat(message) })
+    }
+  }
+  
   render() {
     return (
       <div>
         <Navbar />
-        { this.state.loading ? 'Now loading...' : <MessageList messages={ this.state.messages }/> }
-        <ChatBar currentUser={ this.state.currentUser } addNewMessage={ this.addNewMessage } />
+        <MessageList messages={ this.state.messages }/>
+        <ChatBar 
+          currentUser={ this.state.currentUser }
+          currentMessage={ this.state.currentMessage } 
+          changeUsername={ this.changeUsername } 
+          changeNewMessage={ this.changeNewMessage } 
+          addNewMessage={ this.addNewMessage }
+        />
       </div>
     );
   }
