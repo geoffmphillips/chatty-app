@@ -10,21 +10,11 @@ const Navbar = () => {
   )
 }
 
-const generateRandomId = () => {
-  let output = '';
-  const alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-  for (let i = 0; i < 6; i++) {
-    output += alphanumeric[Math.floor(Math.random() * alphanumeric.length)];
-  }
-
-  return output;
-}
-
 class App extends Component {
   constructor() {
     super();
     this.addNewMessage = this.addNewMessage.bind(this);
+    this.socket = 
     this.state = {
       loading: true,
       currentUser: "Anonymous",
@@ -76,15 +66,16 @@ class App extends Component {
 
   addNewMessage(username, content) {
     const newMessage = {
-      id: generateRandomId(),
-      type: 'incomingMessage',
       username: username,
       content: content,
     }
 
-    this.setState({
-      messages: this.state.messages.concat(newMessage)
-    });
+    const jsonMessage = JSON.stringify(newMessage);
+    this.socket.send(jsonMessage);
+
+    // this.setState({
+    //   messages: this.state.messages.concat(newMessage)
+    // });
   }
 
   updateUsername(username) {
@@ -95,6 +86,10 @@ class App extends Component {
 
   componentDidMount() {
     setTimeout(() => {
+      this.socket = new WebSocket('ws://0.0.0.0:3001');
+      this.socket.onopen = () => {
+        console.log("Connected to websocket");
+      }
       this.setState({
         loading: false,
       });
