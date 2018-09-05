@@ -15,7 +15,7 @@ function ChatBar(props) {
       let notificationMessage = {
         username: newUsername,
         content: user + ' changed their name to ' + newUsername,
-        type: 'incomingNotification',
+        type: 'postNotification',
       }
     sendNewMessage(notificationMessage);
     changeUsername(event.target.value);
@@ -28,7 +28,7 @@ function ChatBar(props) {
       let incomingMessage = {
         username: currentUser || 'Anonymous',
         content: event.target.value,
-        type: 'incomingMessage',
+        type: 'postMessage',
       }
       sendNewMessage(incomingMessage);
       event.target.value = '';
