@@ -27,7 +27,7 @@ function ChatBar(props) {
     if(key === 'Enter') {
       let incomingMessage = {
         username: currentUser || 'Anonymous',
-        content: currentMessage,
+        content: event.target.value,
         type: 'incomingMessage',
       }
       sendNewMessage(incomingMessage);
