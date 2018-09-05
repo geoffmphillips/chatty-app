@@ -2,10 +2,21 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
-const Navbar = () => {
+const userOrUsers = (num) => {
+  let output = 'users';
+
+  if (num === 1) {
+    output = 'user';
+  }
+
+  return output;
+}
+
+const Navbar = (props) => {
   return (
     <nav className="navbar">
       <a href="/" className="navbar-brand">Chatty</a>
+      <p>{props.numUsers} {userOrUsers(props.numUsers)} online</p>
     </nav>
   )
 }
@@ -13,10 +24,13 @@ const Navbar = () => {
 class App extends Component {
   constructor() {
     super();
+
     this.sendNewMessage = this.sendNewMessage.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
     this.changeNewMessage = this.changeNewMessage.bind(this);
+
     this.state = {
+      numUsers: 0,
       currentUser: "Anonymous",
       currentMessage: "",
       messages: [
@@ -72,8 +86,7 @@ class App extends Component {
   changeUsername(username) {
     this.setState({
       currentUser: username,
-    })
-
+    });
   }
 
   changeNewMessage (message) {
@@ -86,15 +99,22 @@ class App extends Component {
     this.socket = new WebSocket('ws://localhost:3001');
 
     this.socket.onmessage = (event) => {
-      let message = JSON.parse(event.data);
-      this.setState( { messages: this.state.messages.concat(message) })
+      let data = JSON.parse(event.data);
+      if (typeof data === 'number') {
+        this.setState({ 
+          numUsers: data
+        })
+        
+      } else {
+        this.setState( { messages: this.state.messages.concat(data) })
+      }
     }
   }
   
   render() {
     return (
       <div>
-        <Navbar />
+        <Navbar numUsers={ this.state.numUsers } />
         <MessageList messages={ this.state.messages }/>
         <ChatBar 
           currentUser={ this.state.currentUser }

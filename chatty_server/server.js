@@ -21,6 +21,7 @@ wss.broadcast = function broadcast(data) {
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  wss.broadcast(JSON.stringify(wss.clients.size));
 
   ws.on('message', function incoming(data) {
     let message = JSON.parse(data);
@@ -28,5 +29,8 @@ wss.on('connection', (ws) => {
     wss.broadcast(JSON.stringify(message));
   });
     
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected')
+    wss.broadcast(JSON.stringify(wss.clients.size))
+  });
 });

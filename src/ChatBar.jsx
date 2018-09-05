@@ -3,23 +3,22 @@ import React from 'react';
 function ChatBar(props) {
   const { sendNewMessage, currentUser, changeUsername, changeNewMessage, currentMessage } = props;
 
-  const onUsernameChange = (event) => {
-    changeUsername(event.target.value);
-  }
-
   const onNewMessageChange = (event) => {
     changeNewMessage(event.target.value);
   }
 
   const onUsernameKeyDown = (event) => {
+    let newUsername = event.target.value;
     let key = event.key;
     if(key === 'Enter') {
+      let user = currentUser || 'Anonymous';
       let notificationMessage = {
-        username: currentUser,
-        content: ' changed their name',
+        username: newUsername,
+        content: user + ' changed their name to ' + newUsername,
         type: 'incomingNotification',
       }
-      sendNewMessage(notificationMessage);
+    sendNewMessage(notificationMessage);
+    changeUsername(event.target.value);
     }
   }
 
@@ -27,7 +26,7 @@ function ChatBar(props) {
     let key = event.key;
     if(key === 'Enter') {
       let incomingMessage = {
-        username: currentUser,
+        username: currentUser || 'Anonymous',
         content: currentMessage,
         type: 'incomingMessage',
       }
@@ -40,10 +39,9 @@ function ChatBar(props) {
     <footer className="chatbar">
       <input 
         onKeyDown={ onUsernameKeyDown }
-        onChange={ onUsernameChange } 
         name="username" 
         className="chatbar-username" 
-        defaultValue={ currentUser } 
+        defaultValue=''
         placeholder="Your Name (Optional)" 
         />
       <input 
