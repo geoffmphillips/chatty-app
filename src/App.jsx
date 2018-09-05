@@ -13,7 +13,7 @@ const Navbar = () => {
 class App extends Component {
   constructor() {
     super();
-    this.addNewMessage = this.addNewMessage.bind(this);
+    this.sendNewMessage = this.sendNewMessage.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
     this.changeNewMessage = this.changeNewMessage.bind(this);
     this.state = {
@@ -64,13 +64,8 @@ class App extends Component {
     }
   }
 
-  addNewMessage(username, content) {
-    const newMessage = {
-      username: username,
-      content: content,
-    }
-
-    const jsonMessage = JSON.stringify(newMessage);
+  sendNewMessage(messageObj) {
+    const jsonMessage = JSON.stringify(messageObj);
     this.socket.send(jsonMessage);
   }
 
@@ -92,7 +87,6 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let message = JSON.parse(event.data);
-      message.type = 'incomingMessage';
       this.setState( { messages: this.state.messages.concat(message) })
     }
   }
@@ -107,7 +101,7 @@ class App extends Component {
           currentMessage={ this.state.currentMessage } 
           changeUsername={ this.changeUsername } 
           changeNewMessage={ this.changeNewMessage } 
-          addNewMessage={ this.addNewMessage }
+          sendNewMessage={ this.sendNewMessage }
         />
       </div>
     );

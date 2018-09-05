@@ -1,7 +1,7 @@
 import React from 'react';
 
 function ChatBar(props) {
-  const { addNewMessage, currentUser, changeUsername, changeNewMessage, currentMessage } = props;
+  const { sendNewMessage, currentUser, changeUsername, changeNewMessage, currentMessage } = props;
 
   const onUsernameChange = (event) => {
     changeUsername(event.target.value);
@@ -14,14 +14,24 @@ function ChatBar(props) {
   const onUsernameKeyDown = (event) => {
     let key = event.key;
     if(key === 'Enter') {
-      addNewMessage(currentUser, ' changed their name');
+      let notificationMessage = {
+        username: currentUser,
+        content: ' changed their name',
+        type: 'incomingNotification',
+      }
+      sendNewMessage(notificationMessage);
     }
   }
 
   const onMessageKeyDown = (event) => {
     let key = event.key;
     if(key === 'Enter') {
-      addNewMessage(currentUser, currentMessage)
+      let incomingMessage = {
+        username: currentUser,
+        content: currentMessage,
+        type: 'incomingMessage',
+      }
+      sendNewMessage(incomingMessage);
       event.target.value = '';
     }
   }
