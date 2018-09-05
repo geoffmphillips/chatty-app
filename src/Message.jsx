@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Displays different html/style depending on message type
 const Message = ({ message }) => {
   const displayMessage = (message.type === 'incomingMessage') ? (
     <div className="message">

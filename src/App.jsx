@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
-// Decides if text should say "x user online" or "x users online"
 const userOrUsers = (num) => {
   let output = 'users';
 
@@ -14,10 +13,11 @@ const userOrUsers = (num) => {
 }
 
 const Navbar = (props) => {
+  const { numUsers } = props;
   return (
     <nav className="navbar">
       <a href="/" className="navbar-brand">Chatty</a>
-      <p>{props.numUsers} {userOrUsers(props.numUsers)} online</p>
+      <p>{numUsers} {userOrUsers(numUsers)} online</p>
     </nav>
   )
 }
@@ -28,12 +28,10 @@ class App extends Component {
 
     this.sendNewMessage = this.sendNewMessage.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
-    this.changeNewMessage = this.changeNewMessage.bind(this);
 
     this.state = {
       numUsers: 0,
-      currentUser: "Anonymous",
-      currentMessage: "",
+      currentUser: '',
       messages: [],
     }
   }
@@ -49,22 +47,16 @@ class App extends Component {
     });
   }
 
-  changeNewMessage (message) {
-    this.setState({
-      currentMessage: message,
-    })
-  }
-
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
+      // Handling if the message from server is an update to users online (number) or a new message
       if (typeof data === 'number') {
         this.setState({ 
           numUsers: data
-        })
-        
+        });
       } else {
         this.setState( { messages: this.state.messages.concat(data) })
       }
@@ -78,9 +70,7 @@ class App extends Component {
         <MessageList messages={ this.state.messages }/>
         <ChatBar 
           currentUser={ this.state.currentUser }
-          currentMessage={ this.state.currentMessage } 
           changeUsername={ this.changeUsername } 
-          changeNewMessage={ this.changeNewMessage } 
           sendNewMessage={ this.sendNewMessage }
         />
       </div>

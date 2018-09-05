@@ -1,24 +1,22 @@
 import React from 'react';
 
 function ChatBar(props) {
-  const { sendNewMessage, currentUser, changeUsername, changeNewMessage, currentMessage } = props;
-
-  const onNewMessageChange = (event) => {
-    changeNewMessage(event.target.value);
-  }
+  const { sendNewMessage, currentUser, changeUsername } = props;
 
   const onUsernameKeyDown = (event) => {
+    // Temporarily storing new username for message content before setting App state's currentuser to the new username
     let newUsername = event.target.value;
     let key = event.key;
-    if(key === 'Enter') {
+    if (key === 'Enter') {
+      // Set displayed username to Anonymous if user hasn't entered a username
       let user = currentUser || 'Anonymous';
       let notificationMessage = {
         username: newUsername,
         content: user + ' changed their name to ' + newUsername,
         type: 'postNotification',
       }
-    sendNewMessage(notificationMessage);
-    changeUsername(event.target.value);
+      sendNewMessage(notificationMessage);
+      changeUsername(newUsername);
     }
   }
 
@@ -26,6 +24,7 @@ function ChatBar(props) {
     let key = event.key;
     if(key === 'Enter') {
       let incomingMessage = {
+        // Set displayed username to Anonymous if user hasn't entered a username
         username: currentUser || 'Anonymous',
         content: event.target.value,
         type: 'postMessage',
@@ -46,7 +45,6 @@ function ChatBar(props) {
         />
       <input 
         onKeyDown={ onMessageKeyDown }
-        onChange={ onNewMessageChange } 
         name="message" 
         className="chatbar-message" 
         placeholder="Type a message and hit ENTER" 

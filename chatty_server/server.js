@@ -21,10 +21,12 @@ wss.broadcast = function broadcast(data) {
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  // Sending updated number of users online to client-side on every connection
   wss.broadcast(JSON.stringify(wss.clients.size));
-
+  
   ws.on('message', function incoming(data) {
     let message = JSON.parse(data);
+    // Update message.type to acceptable type. Unsure of point of this - I originally set the correct state when message was sent from client. Changed to this due to assignment requirements
     if (message.type === 'postNotification') {
       message.type = 'incomingNotification';
     } else {
@@ -33,9 +35,10 @@ wss.on('connection', (ws) => {
     message.id = uuidv4();
     wss.broadcast(JSON.stringify(message));
   });
-    
+  
   ws.on('close', () => {
     console.log('Client disconnected')
     wss.broadcast(JSON.stringify(wss.clients.size))
+    // Sending updated number of users online to client-side on every disconnection
   });
 });
