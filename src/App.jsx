@@ -14,11 +14,11 @@ class App extends Component {
   constructor() {
     super();
     this.addNewMessage = this.addNewMessage.bind(this);
-    this.socket = 
+    this.changeUsername = this.changeUsername.bind(this);
+    this.changeNewMessage = this.changeNewMessage.bind(this);
     this.state = {
-      loading: true,
       currentUser: "Anonymous",
-      // messages: [],
+      currentMessage: "",
       messages: [
         {
         id: 1,
@@ -72,36 +72,44 @@ class App extends Component {
 
     const jsonMessage = JSON.stringify(newMessage);
     this.socket.send(jsonMessage);
-
-    // this.setState({
-    //   messages: this.state.messages.concat(newMessage)
-    // });
   }
 
-  updateUsername(username) {
+  changeUsername(username) {
     this.setState({
       currentUser: username,
-    });
+    })
+
+  }
+
+  changeNewMessage (message) {
+    this.setState({
+      currentMessage: message,
+    })
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.socket = new WebSocket('ws://0.0.0.0:3001');
-      this.socket.onopen = () => {
-        console.log("Connected to websocket");
-      }
-      this.setState({
-        loading: false,
-      });
-    }, 1000);
-  }
+    this.socket = new WebSocket('ws://localhost:3001');
+    this.socket.onmessage = (event) => {
 
+      let message = JSON.parse(event.data);
+      message.type = 'incomingMessage';
+      this.setState( { messages: this.state.messages.concat(message) }
+    )
+  }
+}
+  
   render() {
     return (
       <div>
         <Navbar />
-        { this.state.loading ? 'Now loading...' : <MessageList messages={ this.state.messages }/> }
-        <ChatBar currentUser={ this.state.currentUser } addNewMessage={ this.addNewMessage } />
+        <MessageList messages={ this.state.messages }/>
+        <ChatBar 
+          currentUser={ this.state.currentUser }
+          currentMessage={ this.state.currentMessage } 
+          changeUsername={ this.changeUsername } 
+          changeNewMessage={ this.changeNewMessage } 
+          addNewMessage={ this.addNewMessage }
+        />
       </div>
     );
   }
