@@ -89,14 +89,13 @@ class App extends Component {
 
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
-    this.socket.onmessage = (event) => {
 
+    this.socket.onmessage = (event) => {
       let message = JSON.parse(event.data);
       message.type = 'incomingMessage';
-      this.setState( { messages: this.state.messages.concat(message) }
-    )
+      this.setState( { messages: this.state.messages.concat(message) })
+    }
   }
-}
   
   render() {
     return (
