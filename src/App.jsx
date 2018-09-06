@@ -31,7 +31,10 @@ class App extends Component {
 
     this.state = {
       numUsers: 0,
-      currentUser: '',
+      currentUser: {
+        name: '',
+        color: '#000',
+      },
       messages: [],
     }
   }
@@ -42,9 +45,12 @@ class App extends Component {
   }
 
   changeUsername(username) {
-    this.setState({
-      currentUser: username,
-    });
+    this.setState(prevState => ({
+      currentUser: {
+        ...prevState.currentUser,
+        name: username,
+      },
+    }));
   }
 
   componentDidMount() {
@@ -53,9 +59,12 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
       // Handling if the message from server is an update to users online (number) or a new message
-      if (typeof data === 'number') {
+      if (data.hasOwnProperty('numUsers')) {
         this.setState({ 
-          numUsers: data
+          numUsers: data.numUsers,
+          currentUser: {
+            color: data.color,
+          }
         });
       } else {
         this.setState( { messages: this.state.messages.concat(data) })
@@ -67,7 +76,7 @@ class App extends Component {
     return (
       <div>
         <Navbar numUsers={ this.state.numUsers } />
-        <MessageList messages={ this.state.messages }/>
+        <MessageList messages={ this.state.messages } usernameColor={ this.state.currentUser.color } />
         <ChatBar 
           currentUser={ this.state.currentUser }
           changeUsername={ this.changeUsername } 

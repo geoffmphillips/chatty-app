@@ -8,13 +8,13 @@ function ChatBar(props) {
     let newUsername = event.target.value;
     let key = event.key;
     if (key === 'Enter') {
-      if (newUsername === currentUser) {
+      if (newUsername === currentUser.name) {
         // Lazy error handling
       } else {
-        let user = currentUser || 'Anonymous';
+        let user = currentUser.name || 'Anonymous';
         let postNotification = {
           username: newUsername,
-          content: user + ' changed their name to ' + newUsername,
+          content: user + ' changed their name to ' + (newUsername || 'Anonymous'),
           type: 'postNotification',
         }
         sendNewMessage(postNotification);
@@ -32,7 +32,8 @@ function ChatBar(props) {
          // Lazy error handling
       } else if (urlTest.test(event.target.value)) {
         let postImage = {
-          username: currentUser || 'Anonymous',
+          username: currentUser.name || 'Anonymous',
+          color: currentUser.color,
           type: 'postImage',
           content: event.target.value,
         }
@@ -40,7 +41,8 @@ function ChatBar(props) {
         event.target.value = '';
       } else {
         let postMessage = {
-          username: currentUser || 'Anonymous',
+          username: currentUser.name || 'Anonymous',
+          color: currentUser.color,
           content: event.target.value,
           type: 'postMessage',
         }

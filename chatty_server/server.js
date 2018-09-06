@@ -19,10 +19,17 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
+const colors = ['#BEB8EB', '#37737F', '#A7C98D', '#B34049'];
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  let color = colors[Math.floor(Math.random() * colors.length)];
+  let userConnectionUpdate = {
+    color: color,
+    numUsers: wss.clients.size,
+  }
   // Sending updated number of users online to client-side on every connection
-  wss.broadcast(JSON.stringify(wss.clients.size));
+  wss.broadcast(JSON.stringify(userConnectionUpdate));
   
   ws.on('message', function incoming(data) {
     let message = JSON.parse(data);
@@ -38,14 +45,17 @@ wss.on('connection', (ws) => {
         message.type = 'incomingMessage';
         break;
     }
-    
+
     message.id = uuidv4();
     wss.broadcast(JSON.stringify(message));
   });
   
   ws.on('close', () => {
     console.log('Client disconnected')
-    wss.broadcast(JSON.stringify(wss.clients.size))
+    let userDisconnectUpdate = {
+      numUsers: wss.clients.size,
+    }
+    wss.broadcast(JSON.stringify(userDisconnectUpdate))
     // Sending updated number of users online to client-side on every disconnection
   });
 });
