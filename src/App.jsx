@@ -55,7 +55,6 @@ class App extends Component {
       currentUser: {
         ...prevState.currentUser,
         name: username,
-        // color: prevState.color,
       },
     }));
   }
