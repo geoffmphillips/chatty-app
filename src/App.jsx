@@ -35,7 +35,13 @@ class App extends Component {
         name: '',
         color: '#000',
       },
-      messages: [],
+      messages: [
+        {
+          type: 'incomingNotification',
+          content: 'Welcome to Chatty! Enter your name or start chatting',
+          id: '0',
+        }
+      ],
     }
   }
 

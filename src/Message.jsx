@@ -2,10 +2,8 @@ import React from 'react';
 
 // Displays different html/style depending on message type
 const Message = (props) => {
-  console.log("PROPS: ", props);
-  const {message, usernameColor } = props;
-  const color = { color: usernameColor };
-  console.log(color);
+  const { message, usernameColor } = props;
+  const color = { color: message.color };
   let displayMessage; 
   
   switch (message.type) {
