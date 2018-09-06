@@ -23,13 +23,11 @@ const colors = ['#BEB8EB', '#37737F', '#A7C98D', '#B34049'];
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  let color = colors[Math.floor(Math.random() * colors.length)];
-  let userConnectionUpdate = {
-    color: color,
-    numUsers: wss.clients.size,
-  }
-  // Sending updated number of users online to client-side on every connection
-  wss.broadcast(JSON.stringify(userConnectionUpdate));
+  let userColor = colors[Math.floor(Math.random() * colors.length)];
+  let updateNumUsers = { numUsers: wss.clients.size };
+
+  wss.broadcast(JSON.stringify(updateNumUsers));
+  ws.send(JSON.stringify(userColor));
   
   ws.on('message', function incoming(data) {
     let message = JSON.parse(data);

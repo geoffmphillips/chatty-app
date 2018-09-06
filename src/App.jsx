@@ -55,6 +55,7 @@ class App extends Component {
       currentUser: {
         ...prevState.currentUser,
         name: username,
+        // color: prevState.color,
       },
     }));
   }
@@ -66,17 +67,22 @@ class App extends Component {
       let data = JSON.parse(event.data);
       // Handling if the message from server is an update to users online (number) or a new message
       if (data.hasOwnProperty('numUsers')) {
-        this.setState({ 
+        this.setState({
           numUsers: data.numUsers,
-          currentUser: {
-            color: data.color,
           }
-        });
+        );
+      } else if (data[0] === '#') {
+      this.setState(prevState => ({
+        currentUser: {
+          ...prevState.currentUser,
+          color: data,
+        }
+      }));
       } else {
-        this.setState( { messages: this.state.messages.concat(data) })
-      }
+      this.setState( { messages: this.state.messages.concat(data) })
     }
   }
+}
   
   render() {
     return (

@@ -25,7 +25,7 @@ function ChatBar(props) {
 
   const onMessageKeyDown = (event) => {
     let key = event.key;
-    // Regex to test that message is url ending in png/jpg/gif
+    // Test that message is url ending in png/jpg/gif
     const urlTest = RegExp('(https:?\/\/)?(www\.)?.+\.(png|jpe?g|gif)');
     if(key === 'Enter') {
       if (event.target.value === '') {
@@ -55,6 +55,7 @@ function ChatBar(props) {
   return (
     <footer className="chatbar">
       <input 
+        autoComplete='off'
         onKeyDown={ onUsernameKeyDown }
         name="username" 
         className="chatbar-username" 
@@ -62,6 +63,7 @@ function ChatBar(props) {
         placeholder="Your Name (Optional)" 
         />
       <input 
+        autoComplete='off'
         onKeyDown={ onMessageKeyDown }
         name="message" 
         className="chatbar-message" 
