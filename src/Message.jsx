@@ -2,7 +2,7 @@ import React from 'react';
 
 // Displays different html/style depending on message type
 const Message = (props) => {
-  const { message, usernameColor } = props;
+  const { message } = props;
   const color = { color: message.color };
   let displayMessage; 
   
