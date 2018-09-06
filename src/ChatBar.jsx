@@ -8,13 +8,13 @@ function ChatBar(props) {
     let newUsername = event.target.value;
     let key = event.key;
     if (key === 'Enter') {
-      if (newUsername === currentUser) {
+      if (newUsername === currentUser.name) {
         // Lazy error handling
       } else {
-        let user = currentUser || 'Anonymous';
+        let user = currentUser.name || 'Anonymous';
         let postNotification = {
           username: newUsername,
-          content: user + ' changed their name to ' + newUsername,
+          content: user + ' changed their name to ' + (newUsername || 'Anonymous'),
           type: 'postNotification',
         }
         sendNewMessage(postNotification);
@@ -25,14 +25,15 @@ function ChatBar(props) {
 
   const onMessageKeyDown = (event) => {
     let key = event.key;
-    // Regex to test that message is url ending in png/jpg/gif
+    // Test that message is url ending in png/jpg/gif
     const urlTest = RegExp('(https:?\/\/)?(www\.)?.+\.(png|jpe?g|gif)');
     if(key === 'Enter') {
       if (event.target.value === '') {
          // Lazy error handling
       } else if (urlTest.test(event.target.value)) {
         let postImage = {
-          username: currentUser || 'Anonymous',
+          username: currentUser.name || 'Anonymous',
+          color: currentUser.color,
           type: 'postImage',
           content: event.target.value,
         }
@@ -40,7 +41,8 @@ function ChatBar(props) {
         event.target.value = '';
       } else {
         let postMessage = {
-          username: currentUser || 'Anonymous',
+          username: currentUser.name || 'Anonymous',
+          color: currentUser.color,
           content: event.target.value,
           type: 'postMessage',
         }
@@ -53,6 +55,7 @@ function ChatBar(props) {
   return (
     <footer className="chatbar">
       <input 
+        autoComplete='off'
         onKeyDown={ onUsernameKeyDown }
         name="username" 
         className="chatbar-username" 
@@ -60,6 +63,7 @@ function ChatBar(props) {
         placeholder="Your Name (Optional)" 
         />
       <input 
+        autoComplete='off'
         onKeyDown={ onMessageKeyDown }
         name="message" 
         className="chatbar-message" 

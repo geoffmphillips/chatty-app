@@ -1,7 +1,9 @@
 import React from 'react';
 
 // Displays different html/style depending on message type
-const Message = ({ message }) => {
+const Message = (props) => {
+  const { message } = props;
+  const color = { color: message.color };
   let displayMessage; 
   
   switch (message.type) {
@@ -17,7 +19,7 @@ const Message = ({ message }) => {
       displayMessage = 
         (
           <div className="message">
-            <span className="message-username">{ message.username }</span>
+            <span style={ color } className="message-username">{ message.username }</span>
             <div className="message-content">
               <img src={ message.content } />
             </div>
@@ -28,7 +30,7 @@ const Message = ({ message }) => {
       displayMessage = 
         (
           <div className="message">
-            <span className="message-username">{ message.username }</span>
+            <span style={ color } className="message-username">{ message.username }</span>
             <span className="message-content">{ message.content }</span>
           </div> 
         )

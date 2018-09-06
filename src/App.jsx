@@ -31,8 +31,17 @@ class App extends Component {
 
     this.state = {
       numUsers: 0,
-      currentUser: '',
-      messages: [],
+      currentUser: {
+        name: '',
+        color: '#000',
+      },
+      messages: [
+        {
+          type: 'incomingNotification',
+          content: 'Welcome to Chatty! Enter your name or start chatting',
+          id: '0',
+        }
+      ],
     }
   }
 
@@ -42,9 +51,13 @@ class App extends Component {
   }
 
   changeUsername(username) {
-    this.setState({
-      currentUser: username,
-    });
+    this.setState(prevState => ({
+      currentUser: {
+        ...prevState.currentUser,
+        name: username,
+        // color: prevState.color,
+      },
+    }));
   }
 
   componentDidMount() {
@@ -53,21 +66,29 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
       // Handling if the message from server is an update to users online (number) or a new message
-      if (typeof data === 'number') {
-        this.setState({ 
-          numUsers: data
-        });
+      if (data.hasOwnProperty('numUsers')) {
+        this.setState({
+          numUsers: data.numUsers,
+          }
+        );
+      } else if (data[0] === '#') {
+      this.setState(prevState => ({
+        currentUser: {
+          ...prevState.currentUser,
+          color: data,
+        }
+      }));
       } else {
-        this.setState( { messages: this.state.messages.concat(data) })
-      }
+      this.setState( { messages: this.state.messages.concat(data) })
     }
   }
+}
   
   render() {
     return (
       <div>
         <Navbar numUsers={ this.state.numUsers } />
-        <MessageList messages={ this.state.messages }/>
+        <MessageList messages={ this.state.messages } usernameColor={ this.state.currentUser.color } />
         <ChatBar 
           currentUser={ this.state.currentUser }
           changeUsername={ this.changeUsername } 

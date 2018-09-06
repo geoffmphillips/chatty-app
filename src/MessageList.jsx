@@ -3,9 +3,9 @@ import Message from './Message.jsx';
 
 // Renders all messages passed from App.jsx
 class MessageList extends Component {
-  render() {
+  render() { 
     const messages = this.props.messages.map(message => {
-      return (<Message key={ message.id } message={ message } />)
+      return (<Message usernameColor={ this.props.usernameColor } key={ message.id } message={ message } />)
     })
     return (
       <main className="messages">
