@@ -27,11 +27,18 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data) {
     let message = JSON.parse(data);
     // Update message.type to acceptable type. Unsure of point of this - I originally set the correct state when message was sent from client. Changed to this due to assignment requirements
-    if (message.type === 'postNotification') {
-      message.type = 'incomingNotification';
-    } else {
-      message.type = 'incomingMessage';
+    switch(message.type) {
+      case 'postNotification':
+        message.type = 'incomingNotification';
+        break;
+      case 'postImage':
+        message.type = 'incomingImage';
+        break;
+      default:
+        message.type = 'incomingMessage';
+        break;
     }
+    
     message.id = uuidv4();
     wss.broadcast(JSON.stringify(message));
   });

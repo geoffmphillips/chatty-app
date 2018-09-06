@@ -8,29 +8,45 @@ function ChatBar(props) {
     let newUsername = event.target.value;
     let key = event.key;
     if (key === 'Enter') {
-      // Set displayed username to Anonymous if user hasn't entered a username
-      let user = currentUser || 'Anonymous';
-      let notificationMessage = {
-        username: newUsername,
-        content: user + ' changed their name to ' + newUsername,
-        type: 'postNotification',
+      if (newUsername === currentUser) {
+        // Lazy error handling
+      } else {
+        let user = currentUser || 'Anonymous';
+        let postNotification = {
+          username: newUsername,
+          content: user + ' changed their name to ' + newUsername,
+          type: 'postNotification',
+        }
+        sendNewMessage(postNotification);
+        changeUsername(newUsername);
       }
-      sendNewMessage(notificationMessage);
-      changeUsername(newUsername);
     }
   }
 
   const onMessageKeyDown = (event) => {
     let key = event.key;
+    // Regex to test that message is url ending in png/jpg/gif
+    const urlTest = RegExp('(https:?\/\/)?(www\.)?.+\.(png|jpe?g|gif)');
     if(key === 'Enter') {
-      let incomingMessage = {
-        // Set displayed username to Anonymous if user hasn't entered a username
-        username: currentUser || 'Anonymous',
-        content: event.target.value,
-        type: 'postMessage',
+      if (event.target.value === '') {
+         // Lazy error handling
+      } else if (urlTest.test(event.target.value)) {
+        let postImage = {
+          username: currentUser || 'Anonymous',
+          type: 'postImage',
+          content: event.target.value,
+        }
+        sendNewMessage(postImage);
+        event.target.value = '';
+      } else {
+        let postMessage = {
+          username: currentUser || 'Anonymous',
+          content: event.target.value,
+          type: 'postMessage',
+        }
+        sendNewMessage(postMessage);
+        event.target.value = '';
       }
-      sendNewMessage(incomingMessage);
-      event.target.value = '';
     }
   }
 
