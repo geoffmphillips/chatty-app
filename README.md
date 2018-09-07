@@ -5,11 +5,11 @@ A simple chat app made with ReactJS. Each user is assigned a color for their use
 
 ### Final Product
 
-[cats!](https://github.com/geoffmphillips/chatty-app/blob/master/docs/cat.png)
+![cats!](https://github.com/geoffmphillips/chatty-app/blob/master/docs/cat.png)
 
 Send pictures of cats to your friends! The image resizes based on screen view size.
 
-[colors!](https://github.com/geoffmphillips/chatty-app/blob/master/docs/colors.png)
+![colors!](https://github.com/geoffmphillips/chatty-app/blob/master/docs/colors.png)
 
 Username colors are persistant through name changes and consistent across clients.
 
