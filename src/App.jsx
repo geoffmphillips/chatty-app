@@ -64,7 +64,7 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      // Handling if the message from server is an update to users online (number) or a new message
+      // Handling if the message from server is an update to users online (number), color (string starting with #), or message
       if (data.hasOwnProperty('numUsers')) {
         this.setState({
           numUsers: data.numUsers,
@@ -87,7 +87,7 @@ class App extends Component {
     return (
       <div>
         <Navbar numUsers={ this.state.numUsers } />
-        <MessageList messages={ this.state.messages } usernameColor={ this.state.currentUser.color } />
+        <MessageList messages={ this.state.messages } />
         <ChatBar 
           currentUser={ this.state.currentUser }
           changeUsername={ this.changeUsername } 
