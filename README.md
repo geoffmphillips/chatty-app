@@ -1,45 +1,36 @@
-React Boilerplate
+Chatty
 =====================
 
-A minimal and light dev environment for ReactJS.
+A simple chat app made with ReactJS. Each user is assigned a color for their username. When a user submits a url for an image, the image is displayed instead of text. A websocket server is set up in a sub-directory.
 
-### Usage
+### Final Product
 
-Clone the boilerplate and create your own git repo.
+[thing3](thing3)
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+Send pictures of cats to your friends! The image resizes based on screen view size.
 
-Install the dependencies and start the server.
+[thing2](thing2)
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+Username colors are persistant through name changes and consistent across clients.
 
-### Static Files
+### Getting Started
 
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
+Clone the app and an use ```npm install``` to download dependencies. You'll need to do this in both the Chatty app's directory and the websocket server's directory. Separately get both the Chatty app and the websocket server running with ```npm start```. You'll need two terminals open for this!
 
 ### Dependencies
 
+###### Chatty App Dependencies
+
 * React
 * Webpack
+* React-DOM
+* Express
+* ws
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+###### Websocket Server Dependencies
+
+* Express
+* ws
+* uuid
