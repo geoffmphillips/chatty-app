@@ -15,7 +15,7 @@ Clone the app and an use ```npm install``` to download dependencies. You'll need
 
 ### Dependencies
 
-###### Chatty App Dependencies
+##### Chatty App Dependencies
 
 * React
 * Webpack
@@ -25,7 +25,7 @@ Clone the app and an use ```npm install``` to download dependencies. You'll need
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
-###### Websocket Server Dependencies
+##### Websocket Server Dependencies
 
 * Express
 * ws
